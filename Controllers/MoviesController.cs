@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers
 {
-    public class MoviesControllers : Controller
+    public class MoviesController : Controller
     {
         private readonly AppDbContext _context;
-        public MoviesControllers(AppDbContext context)
+        public MoviesController(AppDbContext context)
         {
             _context = context;
         }
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Movies.ToListAsync();
-            return View();
+            var data = await _context.Movies.Include(n => n.Cinema).OrderBy(n => n.Name).ToListAsync();
+            return View(data);
         }
     }
 }

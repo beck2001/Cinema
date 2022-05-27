@@ -13,8 +13,8 @@ namespace Cinema.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var data = _context.Cinemas.ToListAsync();
-            return View();
+            var data = await _context.Cinemas.ToListAsync();
+            return View(data);
         }
     }
 }
