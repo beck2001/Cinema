@@ -49,10 +49,27 @@ namespace Cinema.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Logo,Name,Description")] Cinema cinema)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CinemaLogo,Name,Description")] CinemaPlace cinema)
         {
             if (!ModelState.IsValid) return View(cinema);
             await _service.UpdateAsync(id, cinema);
+            return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task<IActionResult> Delete(int id)
+        {
+            var cinemaDetails = await _service.GetByIdAsync(id);
+            if (cinemaDetails == null) return View("NotFound");
+            return View(cinemaDetails);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            var cinemaDetails = await _service.GetByIdAsync(id);
+            if (cinemaDetails == null) return View("NotFound");
+
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
