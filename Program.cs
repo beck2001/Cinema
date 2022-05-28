@@ -1,4 +1,5 @@
 using Cinema.Data;
+using Cinema.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ var config = new ConfigurationBuilder()
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnectionString")));
+builder.Services.AddScoped<IActorsService, ActorsService>();
 
 var app = builder.Build();
 
