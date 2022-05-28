@@ -1,20 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Cinema.Data;
+using Cinema.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly AppDbContext _context;
-        public MoviesController(AppDbContext context)
+        private readonly IMoviesService _service;
+
+        public MoviesController(IMoviesService service)
         {
-            _context = context;
+            _service = service;
         }
+
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Movies.Include(n => n.Cinema).OrderBy(n => n.Name).ToListAsync();
-            return View(data);
+            var allMovies = await _service.GetAllAsync(n => n.Cinema);
+            return View(allMovies);
+        }
+        
+        public async Task<IActionResult> Details(int id)
+        {
+            var movieDetail = await _service.GetMovieByIdAsync(id);
+            return View(movieDetail);
         }
     }
 }
